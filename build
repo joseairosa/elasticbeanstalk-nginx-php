@@ -11,7 +11,7 @@
 
 # Global variables
 FILE=${0##*/}
-VERSION=3.0.0
+VERSION=3.1.0
 
 # Parse options
 ARGS=$(/usr/bin/getopt -o a:hv -l addons:,help,verion -n $FILE -- "$@")
@@ -24,10 +24,10 @@ while true; do
                       ADDONS=$1;;
         -v|--version) echo "$VERSION"
                       exit 0;;
-        -h|--help)    echo "Usage: $FILE [options] 
+        -h|--help)    echo "Usage: $FILE [options]
        $FILE --version
 
-Convert AMI instance from Apache to Nginx/PHP-FPM. With support for deployment hooks, Varnish and more through addon packages    
+Convert AMI instance from Apache to Nginx/PHP-FPM. With support for deployment hooks, Varnish and more through addon packages
 
 Options:
   -a|--addons   comma seperated list of addons to install
@@ -36,7 +36,7 @@ Options:
 "
                       exit 0;;
         *)            break;;
-    esac 
+    esac
     shift
 done
 
@@ -54,7 +54,7 @@ fi
 # Download files and folders
 echo "Downloading build files and folders"
 /bin/rm -rf /tmp/build
-/usr/bin/git clone git://github.com/jleck/elasticbeanstalk-nginx-php.git /tmp/build > /dev/null 2>&1
+/usr/bin/git clone git://github.com/richardbenson/elasticbeanstalk-nginx-php.git /tmp/build > /dev/null 2>&1
 if [ ! -f '/tmp/build/build' ]; then
     echo 'Error downloading main folders'
     exit 1
@@ -92,9 +92,9 @@ if [ $? -ne 0 ]; then
 fi
 /bin/rm -rf /etc/nginx/conf.d/*
 
-# Install PHP 5.4 (with httpd 2.4 as dependency)
-echo 'Installing PHP 5.4 with FPM'
-/usr/bin/yum -q -y install php54* --exclude=php54-mysqlnd --skip-broken
+# Install PHP 5.6 (with httpd 2.4 as dependency)
+echo 'Installing PHP 5.6 with FPM'
+/usr/bin/yum -q -y install php56* --exclude=php56-mysqlnd --skip-broken
 if [ $? -ne 0 ]; then
     echo 'Error trying to install PHP'
     exit 1
@@ -129,15 +129,15 @@ echo 'Updating packages'
 
 # Take ownership
 echo 'Correcting permissions'
-/bin/chown -R elasticbeanstalk:elasticbeanstalk /etc/nginx/conf.d \
-                                                /opt/elasticbeanstalk \
+/bin/chown -R webapp:webapp /etc/nginx/conf.d \
+                                                /opt/webapp \
                                                 /var/log/nginx \
                                                 /var/log/php-fpm
 
 # Clear unneeded files
 echo 'Clearing unneeded files'
 /bin/rm -rf /etc/httpd \
-            /opt/elasticbeanstalk/var/log/* \
+            /opt/webapp/var/log/* \
             /tmp/build \
             /var/log/httpd \
             /var/log/nginx/* \
@@ -147,7 +147,7 @@ echo 'Clearing unneeded files'
 /bin/ln -s /var/log/nginx /var/log/httpd
 
 # Clear autostarts
-echo 'Clearning autostarts'
+echo 'Cleaning autostarts'
 /sbin/chkconfig nginx off
 /sbin/chkconfig php-fpm off
 
