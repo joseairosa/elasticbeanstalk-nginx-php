@@ -21,6 +21,6 @@ echo 'Setting up rsyslog fowarding for logentries'
 /bin/cp -rf /tmp/build/addons/logentries/opt /
 
 # End script
-/bin/chown -R elasticbeanstalk:elasticbeanstalk /etc/rsyslog.d
+/bin/chown -R webapp:webapp /etc/rsyslog.d
 /sbin/chkconfig varnish off
 exit 0

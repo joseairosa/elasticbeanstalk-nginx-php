@@ -70,7 +70,7 @@ module ElasticBeanstalk
           raise "Unable to create #{PHPApplication.deploy_dir}" unless File.directory?(PHPApplication.deploy_dir)
 
           HostManager.log "Changing owner, groups and permissions for the deployment directory."
-          output = `/usr/bin/sudo /bin/chown elasticbeanstalk:elasticbeanstalk #{PHPApplication.deploy_dir}`
+          output = `/usr/bin/sudo /bin/chown webapp:webapp #{PHPApplication.deploy_dir}`
           HostManager.log "Output: #{output}"
           output = `/usr/bin/sudo /bin/chmod -Rf 0777 #{PHPApplication.deploy_dir}`
           HostManager.log "Output: #{output}"
@@ -112,7 +112,7 @@ module ElasticBeanstalk
           HostManager.log "Starting deployment."
 
           HostManager.log "Changing owner, groups and permissions for the deployment directory."
-          output = `/usr/bin/sudo /bin/chown elasticbeanstalk:elasticbeanstalk #{PHPApplication.deploy_dir}`
+          output = `/usr/bin/sudo /bin/chown webapp:webapp #{PHPApplication.deploy_dir}`
           HostManager.log "Output: #{output}"
           output = `/usr/bin/sudo /bin/chmod -Rf 0777 #{PHPApplication.deploy_dir}`
           HostManager.log "Output: #{output}"
@@ -138,7 +138,7 @@ module ElasticBeanstalk
           HostManager.log "Output: #{output}"
           raise "Unable to create #{PHPApplication.web_root_dir}" if $?.exitstatus != 0
 
-          output = `/usr/bin/sudo /bin/chown -Rf elasticbeanstalk:elasticbeanstalk #{PHPApplication.web_root_dir} 2>&1`
+          output = `/usr/bin/sudo /bin/chown -Rf webapp:webapp #{PHPApplication.web_root_dir} 2>&1`
           HostManager.log "Output: #{output}"
           raise "Unable to set group / owner of #{PHPApplication.web_root_dir}" if $?.exitstatus != 0
 
@@ -151,7 +151,7 @@ module ElasticBeanstalk
           HostManager.log "Output: #{output}"
           raise "Failed to move application to #{PHPApplication.web_root_dir}" if $?.exitstatus != 0
 
-          output = `/usr/bin/sudo /bin/chown -Rf elasticbeanstalk:elasticbeanstalk #{PHPApplication.web_root_dir} 2>&1`
+          output = `/usr/bin/sudo /bin/chown -Rf webapp:webapp #{PHPApplication.web_root_dir} 2>&1`
           HostManager.log "Output: #{output}"
           raise "Unable to set owner / group of application deployed to #{PHPApplication.web_root_dir}" if $?.exitstatus != 0
 
